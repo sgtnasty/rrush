@@ -19,7 +19,11 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libwayland-dev wayland-protocols
+        sudo apt-get install -y \
+          libwayland-dev \
+          wayland-protocols \
+          libasound2-dev \
+          libpulse-dev
     - name: Build
       run: cargo build --verbose
     - name: Run tests
