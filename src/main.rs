@@ -22,6 +22,7 @@
 //!   [ / ]     slow down / speed up time
 //!   ← / →     orbit the camera
 //!   ↑ / ↓     zoom in / out
+//!   Q         quit
 
 use bevy::prelude::*;
 use bevy::render::view::screenshot::{save_to_disk, Screenshot};
@@ -451,7 +452,7 @@ fn setup(
             "[1] 1s  [2] 2s  [3] 2p_z  [4] 3p_z  [5] 3d_z2  [6] 3d_xy\n\
              [7] 1s+2p_z  [8] 1s+2s  [9] 2p_z+3d_z2  [0] 1s+2p_z+3d_z2\n\
              [R] resample  [Space] spin  [P] pause\n\
-             [ [ ] ] time speed   arrows: orbit / zoom",
+             [ [ ] ] time speed   arrows: orbit / zoom   [Q] quit",
         ),
         TextFont {
             font_size: FontSize::Px(15.0),
@@ -548,7 +549,13 @@ fn handle_input(
     mut current: ResMut<CurrentState>,
     mut clock: ResMut<SimClock>,
     mut rig: ResMut<CameraRig>,
+    mut exit: MessageWriter<AppExit>,
 ) {
+    if keys.just_pressed(KeyCode::KeyQ) {
+        exit.write(AppExit::Success);
+        return;
+    }
+
     let digits = [
         (KeyCode::Digit1, "1"),
         (KeyCode::Digit2, "2"),
