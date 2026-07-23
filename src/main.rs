@@ -41,7 +41,7 @@ mod util;
 
 use bevy::prelude::*;
 
-use components::{CameraRig, CurrentState, DensityRef, SimClock};
+use components::{CameraRig, CurrentState, DensityRef, SimClock, SpeedOverride};
 use physics::{Orbital, SimState};
 use screenshot::shot_plan_from_env;
 use util::state_from_key;
@@ -68,6 +68,12 @@ fn main() {
     } else {
         4.0
     };
+    // `RRUSH_SPEED` overrides the animation speed (handy for slow, smooth
+    // frame capture when generating documentation GIFs).
+    let speed_override = std::env::var("RRUSH_SPEED")
+        .ok()
+        .and_then(|s| s.parse::<f32>().ok());
+    let speed = speed_override.unwrap_or(speed);
     let shot_plan = shot_plan_from_env();
 
     let mut app = App::new();
@@ -92,6 +98,7 @@ fn main() {
         paused: false,
     })
     .insert_resource(DensityRef(1.0))
+    .insert_resource(SpeedOverride(speed_override))
     .insert_resource(CameraRig {
         // A side-on angle (still mode) shows z-axis motion across the view.
         angle: if auto_rotate { 0.0 } else { 1.0 },

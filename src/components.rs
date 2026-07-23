@@ -21,6 +21,11 @@ pub(crate) struct SimClock {
 #[derive(Resource)]
 pub(crate) struct DensityRef(pub(crate) f32);
 
+/// Optional fixed animation speed from `RRUSH_SPEED`; when set it overrides
+/// the per-state suggested speed (used for smooth documentation captures).
+#[derive(Resource)]
+pub(crate) struct SpeedOverride(pub(crate) Option<f32>);
+
 /// Orbit-camera parameters, driven each frame by `drive_camera`.
 #[derive(Resource)]
 pub(crate) struct CameraRig {

@@ -7,7 +7,7 @@ use rand::Rng;
 
 use crate::components::{
     Animated, CameraRig, CloudAssets, CloudPoint, CurrentState, DensityRef, HueBucket, LegendRoot,
-    SimClock, TextRole,
+    SimClock, SpeedOverride, TextRole,
 };
 use crate::render::{hue_color, negative_color, positive_color};
 use crate::util::{hue_bucket, point_scale, sample_cube, state_from_key};
@@ -80,6 +80,7 @@ pub(crate) fn handle_input(
 
 /// When the state changes, clear the old cloud and Monte-Carlo sample a fresh
 /// set of fixed points from the (time-averaged) envelope density.
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn spawn_cloud(
     mut commands: Commands,
     current: Res<CurrentState>,
@@ -87,6 +88,7 @@ pub(crate) fn spawn_cloud(
     mut clock: ResMut<SimClock>,
     mut density_ref: ResMut<DensityRef>,
     mut rig: ResMut<CameraRig>,
+    speed_override: Res<SpeedOverride>,
     existing: Query<Entity, With<CloudPoint>>,
 ) {
     if !current.is_changed() {
@@ -103,7 +105,7 @@ pub(crate) fn spawn_cloud(
     rig.distance = reach * 2.4;
     if dynamic {
         clock.t = 0.0;
-        clock.speed = state.suggested_speed();
+        clock.speed = speed_override.0.unwrap_or_else(|| state.suggested_speed());
     }
 
     let mut rng = rand::rng();
