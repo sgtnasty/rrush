@@ -23,7 +23,8 @@ jobs:
           libwayland-dev \
           wayland-protocols \
           libasound2-dev \
-          libpulse-dev
+          libpulse-dev \
+          libudev-dev
     - name: Build
       run: cargo build --verbose
     - name: Run tests
