@@ -1,0 +1,18 @@
+# cargo-audit configuration.
+# Every ignore here needs a reason and a condition for removing it.
+
+[advisories]
+ignore = [
+    # ruzstd 0.8.3: decompression bomb (OOM). Pinned by bevy_image 0.19
+    # (zstd_rust is part of Bevy's default "3d" feature). rrush loads no
+    # external assets; ruzstd only decodes Bevy's own embedded tonemapping
+    # LUTs, which are trusted. Bevy's zstd_c backend is not an alternative:
+    # the zstd/zstd-safe/zstd-sys crates carry their own open advisories.
+    # Remove when upgrading to Bevy 0.20 (ruzstd ^0.9, patched).
+    "RUSTSEC-2026-0344",
+
+    # ttf-parser 0.25.1: unmaintained (informational, no known vulnerability).
+    # Pulled in by sctk-adwaita (winit's Wayland window decorations).
+    # No maintained release to move to yet; revisit with the next winit.
+    "RUSTSEC-2026-0192",
+]
