@@ -4515,7 +4515,7 @@ dependencies = [
 
 [[package]]
 name = "rrush"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "bevy",
  "rand 0.9.5",
